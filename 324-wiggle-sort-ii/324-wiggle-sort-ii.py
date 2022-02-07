@@ -7,7 +7,7 @@ class Solution:
         nums.sort()
         #nums = [0,1,2,3,4,5]
         
-        half = len(nums[::2])
+        half = len(nums)//2 if len(nums)%2==0 else len(nums)//2+1
         #nums[::2] = [0,2,4]
         #half = 3
 
