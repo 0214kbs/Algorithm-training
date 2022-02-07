@@ -8,8 +8,6 @@ class Solution:
         #nums = [0,1,2,3,4,5]
         
         half = len(nums)//2 if len(nums)%2==0 else len(nums)//2+1
-        #nums[::2] = [0,2,4]
-        #half = 3
 
         nums[::2],nums[1::2] = nums[:half][::-1],nums[half:][::-1]
         # nums[:half] = nums[:3] = [0,1,2]
