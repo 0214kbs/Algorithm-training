@@ -1,0 +1,19 @@
+count = 0
+def dfs(idx, value, numbers, target):
+    global count
+
+    if idx == len(numbers):
+        if value == target:
+            count += 1
+        return 
+    
+    # plus
+    dfs(idx+1, value + numbers[idx],numbers, target)
+    # minus
+    dfs(idx+1, value - numbers[idx],numbers, target)
+    
+def solution(numbers, target):
+    global count
+    dfs(0,0,numbers,target)
+    
+    return count
