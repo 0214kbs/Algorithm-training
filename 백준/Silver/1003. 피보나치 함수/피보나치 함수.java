@@ -25,16 +25,15 @@ public class Main {
 		arr[0] = new Pair(1,0);
 		arr[1] = new Pair(0,1);
 		int max = 1;
+//		arr.add(new Pair(1,0));
+//		arr.add(new Pair(0,1));
 
-		int one, zero;
 		for(int t=0;t<T;t++) {
 			int n = Integer.parseInt(br.readLine());
 			if(n>max) {
 				while(true) {
 					if(max==n) break;
-					one = arr[max].one+arr[max-1].one;
-					zero = arr[max].zero+arr[max-1].zero;
-					arr[max+1] = new Pair(zero,one);
+					arr[max+1] = new Pair(arr[max].zero+arr[max-1].zero,arr[max].one+arr[max-1].one);
 					max+=1;
 				}
 			}
@@ -43,5 +42,4 @@ public class Main {
 		System.out.println(sb);
 	}
 
-	
 }
