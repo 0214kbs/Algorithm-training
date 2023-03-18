@@ -14,27 +14,31 @@ public class Main {
 		}
 	}
 
-	static List<Pair> arr = new ArrayList<>();
+//	static List<Pair> arr = new ArrayList<>();
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		int T = Integer.parseInt(br.readLine());
+		Pair[] arr = new Pair[41];
 		
-		arr.add(new Pair(1,0));
-		arr.add(new Pair(0,1));
+		arr[0] = new Pair(1,0);
+		arr[1] = new Pair(0,1);
+		int max = 1;
+
+		int one, zero;
 		for(int t=0;t<T;t++) {
 			int n = Integer.parseInt(br.readLine());
-			if(n>=arr.size()) {
-				int cur=arr.size()-1;
+			if(n>max) {
 				while(true) {
-					if(cur==n) break;
-					arr.add(new Pair(arr.get(cur-1).zero+arr.get(cur).zero,arr.get(cur).one+arr.get(cur-1).one));
-					cur+=1;
-					
+					if(max==n) break;
+					one = arr[max].one+arr[max-1].one;
+					zero = arr[max].zero+arr[max-1].zero;
+					arr[max+1] = new Pair(zero,one);
+					max+=1;
 				}
 			}
-			sb.append(arr.get(n).zero+" "+arr.get(n).one+"\n");
+			sb.append(arr[n].zero+" "+arr[n].one+"\n");
 		}
 		System.out.println(sb);
 	}
