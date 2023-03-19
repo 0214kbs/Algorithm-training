@@ -8,11 +8,10 @@ public class Main {
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
-		Map<String,Integer> hm = new HashMap<String,Integer>();
 		
 		int T = Integer.parseInt(br.readLine());
 		for(int t=0;t<T;t++) {
-			hm = new HashMap<String,Integer>();
+			Map<String,Integer> hm = new HashMap<>();
 			int n = Integer.parseInt(br.readLine());
 			for(int i=0;i<n;i++) {
 				StringTokenizer st = new StringTokenizer(br.readLine());
@@ -28,7 +27,7 @@ public class Main {
 			for(Integer i: hm.values()) {
 				res = res*(i+1);
 			}
-			sb.append((res-1)+"\n"); // 안 입었을때 
+			sb.append(res-1).append("\n"); // 안 입었을때 
 		}
 		System.out.println(sb);
 	}
