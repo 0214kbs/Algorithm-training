@@ -1,57 +1,49 @@
-class Main {
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int N;
+	static int[][] board;
+	static int minV = Integer.MAX_VALUE;
+	static boolean[] visit;
 	
-	private static int[][] map, dp;
-	private static int full, N, INF = 17 * 1000000 + 1;
-	
-	public static void main(String[] args) throws Exception {
-		N = read();
-		map = new int[N][N];
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+		board = new int[N][N];
+		visit = new boolean[N];
 		
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				map[i][j] = read();
-				
-				if (map[i][j] == 0) {
-					map[i][j] = INF;
-				}
+		for(int i=0;i<N;i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for(int j=0;j<N;j++) {
+				board[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
 		
-		full = (1 << N) - 1;
-		dp = new int[N][full];
+		for(int i=0;i<N;i++) {
+			visit[i] = true;
+			tsp(i,i,0,0);
+			visit[i] = false;
+		}
 		
-		System.out.print(dfs(0, 1));
+		if(minV == Integer.MAX_VALUE) System.out.println(0);
+		else System.out.println(minV);
 	}
 	
-	private static int read() throws Exception {
-		int c, n = System.in.read() & 15;
-		
-		while ((c = System.in.read()) > 32) {
-			n = (n << 3) + (n << 1) + (c & 15);
+	static void tsp(int start, int now, int cnt, int cost ) {
+		if(cnt == N-1) {
+			if(board[now][start] == 0) return;
+			minV = Math.min(minV, cost+board[now][start]);
+			return;
 		}
 		
-		return n;
-	}
-	
-	private static int dfs(int curr, int visited) {
-		if (visited == full) {
-			return map[curr][0];
-		}
-		
-		if (dp[curr][visited] != 0) {
-			return dp[curr][visited];
-		}
-		
-        int res = INF;
-        
-		for (int i = 0; i < N; i++) {
-			if (map[curr][i] == INF || (visited & (1 << i)) != 0) {
-				continue;
+		for(int i=0;i<N;i++) {
+			if(!visit[i]&&board[now][i]!=0) {
+				visit[i] = true;
+				tsp(start,i, cnt+1,cost+board[now][i]);
+				visit[i] = false;
 			}
-			
-			res = Math.min(res, dfs(i, visited | (1 << i)) + map[curr][i]);
 		}
-		
-		return dp[curr][visited] = res;
 	}
 }
