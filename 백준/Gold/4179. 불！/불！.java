@@ -2,47 +2,66 @@ import java.io.*;
 import java.util.*;
 
 class Main{
+	
+	private static class Point {
+		int r;
+		int c;
+		int turn;
+		
+		public Point() {}
+		
+		public Point(int r, int c, int turn) {
+			this.r = r;
+			this.c = c;
+			this.turn = turn;
+		}
+	}
+	
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static int startX,startY;
     public static void main(String[] args)throws Exception{
-        ArrayDeque<int[]> q = new ArrayDeque<>();
+        ArrayDeque<Point> q = new ArrayDeque<>();
         StringTokenizer st = new StringTokenizer(br.readLine());
         int[][] dxy = {{0,1},{0,-1},{1,0},{-1,0}};
         int x = Integer.parseInt(st.nextToken());
         int y = Integer.parseInt(st.nextToken());
-        char[][]arr = new char[x][y];
+        char[][]map = new char[x][y];
         for(int i=0; i<x;i++)
             for(int j=0; j<y; j++){
-                arr[i][j] = read();
-                if(arr[i][j]=='J'){
+            	map[i][j] = read();
+                if(map[i][j]=='J'){
                     startX = i;
                     startY = j;
-                }else if(arr[i][j]=='F'){
-                    q.add(new int[]{i,j,0});
+                }else if(map[i][j]=='F'){
+                    q.add(new Point(i, j, 0));
                 }
             }
         
-        q.add(new int[]{startX,startY,0});
+        q.add(new Point(startX, startY, 0));
         
         while(!q.isEmpty()){
-            int[] qData = q.poll();
+            Point curr = q.poll();
             
             for(int[] xy : dxy){
-                int x1 = qData[0] + xy[0];
-                int y1 = qData[1] + xy[1];
-                int dist = qData[2] + 1;
+                int nr = curr.r + xy[0];
+                int nc = curr.c + xy[1];
+                int dist = curr.turn + 1;
                 
-                if(x1<0 || y1<0 || x1>=x || y1>=y){
-                    if(arr[qData[0]][qData[1]]=='J'){
-                        System.out.println(dist);
-                        return;
-                    }else 
-                        continue;
-                }
-                if(arr[x1][y1]!='.') continue;
+                if (nr < 0 || nr >= x || nc < 0 || nc >= y) {
+					if (map[curr.r][curr.c] == 'J') {
+						System.out.println(dist);
+						return;
+					}
+					
+					continue;
+				}
+
+                if (map[nr][nc] != '.') {
+					continue;
+				}
                 
-                arr[x1][y1] = arr[qData[0]][qData[1]];
-                q.add(new int[]{x1,y1,dist});
+                map[nr][nc] = map[curr.r][curr.c];
+                q.add(new Point(nr,nc,dist));
                 
             }
         }
