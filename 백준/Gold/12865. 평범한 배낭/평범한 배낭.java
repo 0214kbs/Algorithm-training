@@ -1,30 +1,22 @@
-
 class Main {
 	public static void main(String[] args) throws Exception {
 		int N = read();
 		int K = read();
 		
-		int[][] dp = new int[N + 1][K + 1];
-		int[] weight = new int[N + 1];
-		int[] value = new int[N + 1];
+		int[] dp = new int[K + 1];
 		
-		for (int i = 1; i <= N; i++) {
-			weight[i] = read();
-			value[i] = read();
-		}
-		
-		for (int i = 1; i <= N; i++) {
-			for (int j = 1; j <= K; j++) {
-				if (weight[i] > j) {
-					dp[i][j] = dp[i - 1][j];
-					
-				} else {
-					dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]);
+		for (int i = 0; i < N; i++) {
+			int w = read();
+			int v = read();
+			
+			for (int j = K; j >= w; j--) {
+				if (dp[j] < dp[j - w] + v) {
+					dp[j] = dp[j - w] + v;
 				}
 			}
 		}
 		
-		System.out.print(dp[N][K]);
+		System.out.print(dp[K]);
 	}
 	
 	private static int read() throws Exception {
