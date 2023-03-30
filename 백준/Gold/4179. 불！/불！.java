@@ -1,5 +1,5 @@
-import java.io.*;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 class Main{
 	
@@ -20,25 +20,31 @@ class Main{
 	private static int[] dr = {-1, 1, 0, 0};
 	private static int[] dc = {0, 0, -1, 1};
 	
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static int startX,startY;
+    
     public static void main(String[] args)throws Exception{
-        ArrayDeque<Point> queue = new ArrayDeque<>();
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int[][] dxy = {{0,1},{0,-1},{1,0},{-1,0}};
-        int R = Integer.parseInt(st.nextToken());
-        int C = Integer.parseInt(st.nextToken());
-        char[][]map = new char[R][C];
-        for(int i=0; i<R;i++)
-            for(int j=0; j<C; j++){
-            	map[i][j] = read();
-                if(map[i][j]=='J'){
-                    startX = i;
+        int R = read();
+        int C = read();
+        
+        byte[][] map = new byte[R][C + 1];
+		
+		for (int i = 0; i < R; i++) {
+			System.in.read(map[i]);
+		}
+        
+		Queue<Point> queue = new ArrayDeque<>();
+        
+        for (int i = 0; i < R; i++) {
+			for (int j = 0; j < C; j++) {
+				if (map[i][j] == 74) {
+					startX = i;
                     startY = j;
-                }else if(map[i][j]=='F'){
-                	queue.add(new Point(i, j, 0));
-                }
-            }
+					
+				} else if (map[i][j] == 70) {
+					queue.add(new Point(i, j, 0));
+				}
+			}
+		}
         
         queue.add(new Point(startX, startY, 0));
         
@@ -50,7 +56,7 @@ class Main{
 				int nc = curr.c + dc[i];
 					
 				if (nr < 0 || nr >= R || nc < 0 || nc >= C) {
-					if (map[curr.r][curr.c] == 'J') {
+					if (map[curr.r][curr.c] == 74) {
 						System.out.println(curr.turn + 1);
 						return;
 					}
@@ -58,7 +64,7 @@ class Main{
 					continue;
 				}
 				
-				if (map[nr][nc] != '.') {
+				if (map[nr][nc] != 46) {
 					continue;
 				}
 					
@@ -69,11 +75,14 @@ class Main{
 		
 		System.out.print("IMPOSSIBLE");
     }
-    public static char read()throws Exception{
-        while(true){
-            int num = br.read();
-            if(num!='\n')
-                return (char)num;
-        }
+
+    private static int read() throws Exception {
+    	int c, n = System.in.read() & 15;
+    	
+    	while ((c = System.in.read()) > 32) {
+    		n = (n << 3) + (n << 1) + (c & 15);
+    	}
+    	
+    	return n;
     }
 }
