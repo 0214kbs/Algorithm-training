@@ -38,17 +38,16 @@ class Main {
 		int end = answer;
 		
 		while (start <= end) {
-			int mid = (start + end) / 2;
+			int mid = (start + end) >> 1;
 			
 			if (dp[mid] < num) {
 				start = mid + 1;
 				
-			} else {
-				if (dp[mid] == num) {
-					return;
-				}
-				
+			} else if (dp[mid] > num) {
 				end = mid - 1;
+				
+			} else {
+				return;
 			}
 		}
 		
