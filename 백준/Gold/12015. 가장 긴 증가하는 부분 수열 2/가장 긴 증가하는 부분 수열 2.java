@@ -9,7 +9,7 @@ class Main {
 		dp = new int[N];
 		dp[0] = read();
 		
-		for (int i = 1; i < N; i++) {
+		while (N-- > 1) {
 			int num = read();
 			
 			if (dp[answer] < num) {
