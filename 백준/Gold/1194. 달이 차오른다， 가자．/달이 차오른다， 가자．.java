@@ -1,6 +1,3 @@
-import java.util.ArrayDeque;
-import java.util.Queue;
-
 class Main {
 	
 	public static class Point {
@@ -58,13 +55,15 @@ class Main {
 	}
 	
 	private static int bfs(int r, int c) {
-		Queue<Point> queue = new ArrayDeque<>();
+		Point[] queue = new Point[N * M * 64];
+		int head = 0;
+		int tail = -1;
 		
-		queue.offer(new Point(r, c, 0, 0));
+		queue[++tail] = new Point(r, c, 0, 0);
 		visited[0][r][c] = true;
 		
-		while (!queue.isEmpty()) {
-			Point curr = queue.poll();
+		while (tail > head - 1) {
+			Point curr = queue[head++];
 			
 			if (map[curr.r][curr.c] == 49) {
 				return curr.count;
@@ -89,7 +88,7 @@ class Main {
 					nm |= (1 << (map[nr][nc] - 'a'));
 				}
 				
-				queue.offer(new Point(nr, nc, nm, curr.count + 1));
+				queue[++tail] = new Point(nr, nc, nm, curr.count + 1);
 				visited[nm][nr][nc] = true;
 			}
 		}
