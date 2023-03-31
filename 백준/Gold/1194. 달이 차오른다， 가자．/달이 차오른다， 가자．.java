@@ -1,97 +1,99 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.StringTokenizer;
 
-public class Main {
-	static int N, M, ans;
-	static char[][] map;
-	static boolean[][][] visit;
-
-	static int[] dy = { -1, 1, 0, 0 };
-	static int[] dx = {  0, 0,-1, 1 };
-	// bfs
-	static Queue<Node> queue = new ArrayDeque<>();
-
-	public static void main(String[] args) throws Exception{
-	    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	    StringTokenizer st = new StringTokenizer(br.readLine());
-	    
-	    N = Integer.parseInt(st.nextToken());
-	    M = Integer.parseInt(st.nextToken());
-	    
-	    map = new char[N][M];
-	    visit = new boolean[N][M][1 << 6];
-	    
-	    for (int i = 0; i < N; i++) {
-	        String str = br.readLine();
-	        for (int j = 0; j < M; j++) {
-	            char ch = str.charAt(j);
-	            map[i][j] = ch;
-	            if( ch == '0' ) {
-	                visit[i][j][0] = true;
-	                queue.offer(new Node(i, j, 0, 0 ));
-	            }
-	        }
-	    }
-	    
-	    // 풀이
-	    bfs();
-	    
-	    System.out.println(ans);
+class Main {
+	
+	public static class Point {
+		int r;
+		int c;
+		int mask;
+		int count;
+		
+		public Point(int r, int c, int mask, int count) {
+			this.r = r;
+			this.c = c;
+			this.mask = mask;
+			this.count = count;
+		}
 	}
-
-	static void bfs() {
-	    while( !queue.isEmpty() ) {
-	        Node node = queue.poll();
-	        
-	        // 도착지
-	        if( map[node.y][node.x] == '1' ) {
-	            ans = node.d;
-	            return;
-	        }
-	        
-	        // 사방 탐색
-	        for (int d = 0; d < 4; d++) {
-	            int ny = node.y + dy[d];
-	            int nx = node.x + dx[d];
-	            
-	            int key = node.key;
-	            
-	            // range check, 벽돌
-	            if( ny < 0 || nx < 0 || ny >= N || nx >= M || map[ny][nx] == '#' ) continue;
-	            
-	            // key - 획득 경우
-	            if( 'a' <= map[ny][nx] && map[ny][nx] <= 'f' ) {
-	                key |= ( 1 << ( map[ny][nx] - 'a' ) );
-	            }
-	            
-	            // key - 사용해야 하는 경우
-	            if( 'A' <= map[ny][nx] && map[ny][nx] <= 'F' ) {
-	                if( (key & (1 << ( map[ny][nx] - 'A' ))) == 0 ) continue;
-	            }
-	            
-	            // visit
-	            if( visit[ny][nx][key] ) continue;
-	            
-	            visit[ny][nx][key] = true;
-	            queue.offer(new Node(ny, nx, key, node.d + 1));
-	        }
-	    }
-	    
-	    // 1에 도착하지 못하는 경우
-	    ans = -1;
+	
+	private static int[] dr = {-1, 1, 0, 0};
+	private static int[] dc = {0, 0, -1, 1};
+	
+	private static boolean[][][] visited;
+	private static byte[][] map;
+	private static int N, M;
+	
+	public static void main(String[] args) throws Exception {
+		N = read();
+		M = read();
+		map = new byte[N][M + 1];
+		
+		int startR = 0;
+		int startC = 0;
+		
+		for (int i = 0; i < N; i++) {
+			System.in.read(map[i]);
+			
+			for (int j = 0; j < M; j++) {
+				if (map[i][j] == 48) {
+					startR = i;
+					startC = j;
+				}
+			}
+		}
+		
+		visited = new boolean[(1 << 6)][N][M];
+		System.out.print(bfs(startR, startC));
 	}
-
-	static class Node{
-	    int y, x, key, d;
-	    
-	    Node( int y, int x, int key, int d ){
-	        this.y = y;
-	        this.x = x;
-	        this.key = key;
-	        this.d = d;
-	    }
+	
+	private static int read() throws Exception {
+		int c, n = System.in.read() & 15;
+		
+		while ((c = System.in.read()) > 32) {
+			n = (n << 3) + (n << 1) + (c & 15);
+		}
+		
+		return n;
+	}
+	
+	private static int bfs(int r, int c) {
+		Queue<Point> queue = new ArrayDeque<>();
+		
+		queue.offer(new Point(r, c, 0, 0));
+		visited[0][r][c] = true;
+		
+		while (!queue.isEmpty()) {
+			Point curr = queue.poll();
+			
+			if (map[curr.r][curr.c] == 49) {
+				return curr.count;
+			}
+			
+			for (int i = 0; i < 4; i++) {
+				int nr = curr.r + dr[i];
+				int nc = curr.c + dc[i];
+				int nm = curr.mask;
+				
+				if (nr < 0 || nr >= N || nc < 0 || nc >= M || map[nr][nc] == 35 || visited[nm][nr][nc]) {
+					continue;
+				}
+				
+				if (map[nr][nc] >= 'A' && map[nr][nc] <= 'F') {
+					if ((nm & (1 << (map[nr][nc] - 'A'))) == 0) {
+						continue;
+						
+					}
+					
+				} else if (map[nr][nc] >= 'a' && map[nr][nc] <= 'f') {
+					nm |= (1 << (map[nr][nc] - 'a'));
+				}
+				
+				queue.offer(new Point(nr, nc, nm, curr.count + 1));
+				visited[nm][nr][nc] = true;
+			}
+		}
+		
+		return -1;
 	}
 }
