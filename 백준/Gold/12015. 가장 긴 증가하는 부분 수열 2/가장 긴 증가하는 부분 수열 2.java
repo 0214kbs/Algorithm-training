@@ -1,25 +1,22 @@
 class Main {
 	
-	private static int[] arr, dp;
+	private static int[] dp;
 	private static int N, answer;
 	
 	public static void main(String[] args) throws Exception {
 		N = read();
-		arr = new int[N];
-		
-		for (int i = 0; i < N; i++) {
-			arr[i] = read();
-		}
 		
 		dp = new int[N];
-		dp[0] = arr[0];
+		dp[0] = read();
 		
 		for (int i = 1; i < N; i++) {
-			if (dp[answer] < arr[i]) {
-				dp[++answer] = arr[i];
+			int num = read();
+			
+			if (dp[answer] < num) {
+				dp[++answer] = num;
 				
 			} else {
-				binarySearch(arr[i]);
+				binarySearch(num);
 			}
 		}
 		
