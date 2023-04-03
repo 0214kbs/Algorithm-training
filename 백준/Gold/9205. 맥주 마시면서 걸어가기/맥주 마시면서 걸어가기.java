@@ -1,6 +1,3 @@
-import java.util.ArrayDeque;
-import java.util.Queue;
-
 class Main {
 	
 	private static class Point {
@@ -14,10 +11,10 @@ class Main {
 	}
 	
 	private static Point[] points;
-	private static boolean[][] distance;
 	private static int n;
 	
 	public static void main(String[] args) throws Exception {
+		StringBuilder sb = new StringBuilder();
 		int t = read();
 		
 		while (t-- > 0) {
@@ -28,11 +25,10 @@ class Main {
 				points[i] = new Point(read(), read());
 			}
 			
-			StringBuilder sb = new StringBuilder();
-			sb.append(bfs() ? "happy\n" : "sad\n");
-			
-			System.out.print(sb);
+			sb.append(bfs());
 		}
+		
+		System.out.print(sb);
 	}
 	
 	private static int read() throws Exception {
@@ -50,40 +46,36 @@ class Main {
 		return isNegative ? ~n + 1 : n;
 	}
 	
-	private static boolean bfs() {
-		distance = new boolean[n + 2][n + 2];
-		
-		for (int i = 0; i < n + 2; i++) {
-			for (int j = i + 1; j < n + 2; j++) {
-				if (Math.abs(points[i].r - points[j].r) + Math.abs(points[i].c - points[j].c) <= 1000) {
-					distance[i][j] = distance[j][i] = true;
-				}
-			}
-		}
-		
-		Queue<Integer> queue = new ArrayDeque<>();
+	private static String bfs() {
+		Point[] queue = new Point[n + 2];
 		boolean[] visited = new boolean[n + 2];
+		int head = 0;
+		int tail = -1;
 		
-		queue.offer(0);
+		queue[++tail] = points[0];
 		visited[0] = true;
 		
-		while (!queue.isEmpty()) {
-			int curr = queue.poll();
+		while (tail > head - 1) {
+			int size = tail - head + 1;
 			
-			if (curr == n + 1) {
-				return true;
-			}
-			
-			for (int i = 1; i < n + 2; i++) {
-				if (i == curr || visited[i] || !distance[curr][i]) {
-					continue;
-				}
+			while (size-- > 0) {
+				Point curr = queue[head++];
 				
-				queue.offer(i);
-				visited[i] = true;
+				for (int i = 1; i < n + 2; i++) {
+					if (visited[i] || Math.abs(curr.r - points[i].r) + Math.abs(curr.c - points[i].c) > 1000) {
+						continue;
+					}
+					
+					if (i == n + 1) {
+						return "happy\n";
+					}
+					
+					queue[++tail] = points[i];
+					visited[i] = true;
+				}
 			}
 		}
 		
-		return false;
+		return "sad\n";
 	}
 }
