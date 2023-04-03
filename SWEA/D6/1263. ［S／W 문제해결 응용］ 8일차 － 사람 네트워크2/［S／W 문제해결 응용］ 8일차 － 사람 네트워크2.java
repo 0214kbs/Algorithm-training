@@ -1,61 +1,45 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Queue;
 import java.util.StringTokenizer;
- 
+
 public class Solution {
-    public static void main(String[] args)  throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        int T = Integer.parseInt(br.readLine());
-         
-        for (int tc = 1; tc <= T; tc++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-             
-            int N = Integer.parseInt(st.nextToken());
-            ArrayList<Integer>[] adList = new ArrayList[N + 1];
-             
-            for (int i = 1; i <= N; i++) {
-                adList[i] = new ArrayList<Integer>();
-                for (int j = 1; j <= N; j++)
-                    if(st.nextToken().charAt(0) == '1')
-                        adList[i].add(j);
-            }
-             
-            int min = 1000001;
-            for (int i = 1; i <= N; i++) {
-                boolean[] check = new boolean[N + 1];
-                 
-                Queue<Integer> q = new ArrayDeque<>();
-                q.add(i);
-                check[i] = true;
-                 
-                int sum = 0;
-                int dist = 0;
-                int cnt = 1;
-x:              while(!q.isEmpty()) {
-                    int len = q.size();
-                    dist++;
-                     
-                    while(len-- > 0) {
-                        int n = q.poll();
-                        for (Integer next : adList[n]) {
-                            if(!check[next]) {
-                                q.add(next);
-                                check[next] = true;
-                                sum += dist;
-                                if(++cnt == N) break x;
-                            }
-                        }
-                    }
-                }
-                 
-                min = Math.min(sum, min);
-            }
-            sb.append("#").append(tc).append(" ").append(min).append("\n");
-        }
-        System.out.println(sb);
-    }
+	static final int INF = 9999999;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+		for(int t=1;t<=T;t++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int n = Integer.parseInt(st.nextToken());
+			int[][] adjMatrix = new int[n][n];
+			for(int i=0;i<n;i++) {
+				for(int j=0;j<n;j++) {
+					int tmp = Integer.parseInt(st.nextToken());
+					if(i != j && tmp==0) adjMatrix[i][j]=INF;
+					else adjMatrix[i][j] = tmp;
+				}
+			}
+			
+			for(int k=0; k<n; ++k) {
+				for(int i=0; i<n; ++i) {
+					if(i==k) continue;
+					for(int j=0; j<n; ++j) {
+						if(i==j || k==j) continue;
+						adjMatrix[i][j] = Math.min(adjMatrix[i][j], adjMatrix[i][k]+adjMatrix[k][j]);
+					}
+				}
+			}
+			
+			int min = Integer.MAX_VALUE;
+			for(int i=0;i<n;i++) {
+				int sum = 0;
+				for(int j=0;j<n;j++) {
+					sum+= adjMatrix[i][j];
+				}
+				min = Math.min(min, sum);
+			}
+			
+			System.out.println("#"+t+" "+min);
+		}
+		
+	}
 }
