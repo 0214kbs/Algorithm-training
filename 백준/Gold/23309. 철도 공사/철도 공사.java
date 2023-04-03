@@ -70,11 +70,6 @@ class Main {
 		}
 		
 		System.out.print(sb);
-		
-		// 34
-		// 20
-		// 44
-		// 30
 	}
 	
 	private static int read() throws Exception {
