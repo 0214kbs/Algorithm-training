@@ -1,68 +1,89 @@
-import java.io.*;
-import java.util.*;
-public class Main {
+class Main {
 	
-	static StringBuilder sb = new StringBuilder();
-	
-	public static void main(String[] args)throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		Integer.parseInt(st.nextToken());
-		int M = Integer.parseInt(st.nextToken());
-		st  = new StringTokenizer(br.readLine());
-		Station station = new Station();
-		int target = -1;
-		while(st.hasMoreTokens()) {
-			int number = Integer.parseInt(st.nextToken());
-			station.add(target, number);
-			target = number;
+	public static void main(String[] args) throws Exception {
+		int[] prev = new int[1000001];
+		int[] next = new int[1000001];
+		
+		int N = read();
+		int M = read();
+		
+		int start = read();
+		int before = start;
+		
+		while (N-- > 2) {
+			int curr = read();
+			prev[curr] = before;
+			next[before] = curr;
+			before = curr;
 		}
-		while(M-->0) {
-			st=new StringTokenizer(br.readLine());
+		
+		int end = read();
+		prev[end] = before;
+		next[before] = end;
+		prev[start] = end;
+		next[end] = start;
+		
+		StringBuilder sb = new StringBuilder();
+		
+		while (M-- > 0) {
+			int cmd = read();
+			int i = read();
+			int j = 0, temp = 0;
 			
-			String command = st.nextToken();
-			int targetNumber = Integer.parseInt(st.nextToken()),newNumber=-1;
-			if(st.hasMoreTokens()) newNumber = Integer.parseInt(st.nextToken());
-			
-			if(command.equals("BN")) {
-				station.print(station.nextNodes[targetNumber]);
-				station.add(targetNumber, newNumber);
-			}else if(command.equals("BP")) {
-				station.print(station.preNodes[targetNumber]);
-				station.add(station.preNodes[targetNumber], newNumber);
-			}else if(command.equals("CN")) {
-				station.print(station.nextNodes[targetNumber]);
-				station.delete(station.nextNodes[targetNumber]);
-			}else {
-				station.print(station.preNodes[targetNumber]);
-				station.delete(station.preNodes[targetNumber]);
+			switch (cmd) {
+				case 34:
+					j = read();
+					temp = next[i];
+					next[i] = j;
+					next[j] = temp;
+					prev[j] = i;
+					prev[temp] = j;
+					
+					break;
+					
+				case 20:
+					j = read();
+					temp = prev[i];
+					prev[i] = j;
+					prev[j] = temp;
+					next[j] = i;
+					next[temp] = j;
+					
+					break;
+					
+				case 44:
+					temp = next[i];
+					next[i] = next[temp];
+					prev[next[i]] = i;
+					
+					break;
+					
+				case 30:
+					temp = prev[i];
+					prev[i] = prev[temp];
+					next[prev[i]] = i;
+					
+					break;
 			}
+			
+			sb.append(temp).append('\n');
 		}
-		System.out.print(sb.toString());
+		
+		System.out.print(sb);
+		
+		// 34
+		// 20
+		// 44
+		// 30
 	}
-	static class Station{
-		int[] preNodes;
-		int[] nextNodes;
-		Station(){
-			preNodes = new int[1000001];
-			nextNodes = new int[1000001];
+	
+	private static int read() throws Exception {
+		int c, n = System.in.read() & 15;
+		
+		while ((c = System.in.read()) > 32) {
+			n = (n << 3) + (n << 1) + (c & 15);
 		}
-		void add(int target, int node) {
-			if(target==-1) {
-				preNodes[node] = nextNodes[node] = node;
-				return;
-			}
-			preNodes[node] = target;
-			nextNodes[node] = nextNodes[target];
-			preNodes[nextNodes[target]] = node;
-			nextNodes[target] = node;
-		}
-		void delete(int target) {
-			preNodes[nextNodes[target]] = preNodes[target];
-			nextNodes[preNodes[target]] = nextNodes[target];
-		}
-		void print(int num) {
-			sb.append(num+"\n");
-		}
+		
+		return n;
 	}
 }
