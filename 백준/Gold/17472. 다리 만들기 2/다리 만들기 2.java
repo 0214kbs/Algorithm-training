@@ -138,11 +138,7 @@ class Main {
 			}
 		}
 		
-		if (count == islandCount - 1) {
-			System.out.println(result == 0 ? -1 : result);
-		} else {
-			System.out.println(-1);
-		}
+		System.out.println(count == islandCount - 1 ? result : -1);
 	}
 	
 	private static int read() throws Exception {
