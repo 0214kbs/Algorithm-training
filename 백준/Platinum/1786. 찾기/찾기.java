@@ -17,6 +17,9 @@ class Main {
 	        
 	        if (pattern[i] == pattern[j]) {
 	        	pi[i] = ++j;
+	        	
+	        } else {
+	        	pi[i] = 0;
 	        }
 	    }
 	    
