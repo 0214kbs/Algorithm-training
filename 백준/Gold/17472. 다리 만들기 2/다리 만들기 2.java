@@ -133,12 +133,13 @@ class Main {
 				result += bridge.distance;
 				
 				if (++count == islandCount - 1) {
-					break;
+					System.out.print(result);
+					return;
 				}
 			}
 		}
 		
-		System.out.println(count == islandCount - 1 ? result : -1);
+		System.out.print(-1);
 	}
 	
 	private static int read() throws Exception {
