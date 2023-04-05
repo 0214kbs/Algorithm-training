@@ -1,66 +1,45 @@
-class Main {
-	public static void main(String[] args) throws Exception {
-		int N = read();
-		int d = read();
-		int k = read();
-		int c = read();
-		
-		int[] arr = new int[N + k];
-		
-		for (int i = 0; i < N; i++) {
-			arr[i] = read();
-		}
-		
-		for (int i = N; i < N + k; i++) {
-			arr[i] = arr[i - N];
-		}
-		
-		int[] visited = new int[d + 1];
-		int count = 1;
-		visited[c] = 1;
-		
-		for (int i = 0; i < k; i++) {
-			if (visited[arr[i]] == 0) {
-				count++;
-			}
-			
-			visited[arr[i]]++;
-		}
-		
-		int max = count;
-		
-		for (int i = k; i < N + k; i++) {
-			if (arr[i - k] == arr[i]) {
-				continue;
-			}
-			
-			visited[arr[i - k]]--;
-			
-			if (visited[arr[i - k]] == 0) {
-				count--;
-			}
-			
-			if (visited[arr[i]] == 0) {
-				count++;
-			}
-			
-			visited[arr[i]]++;
-			
-			if (count > max) {
-				max = count;
-			}
-		}
-		
-		System.out.print(max);
-	}
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	static int n,d,k,c,cnt;
+	static int[] selected;
+	static int[] dish;
 	
-	private static int read() throws Exception {
-		int c, n = System.in.read() & 15;
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
-		while ((c = System.in.read()) > 32) {
-			n = (n << 3) + (n << 1) + (c & 15);
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		n = Integer.parseInt(st.nextToken());
+		d = Integer.parseInt(st.nextToken());
+		k = Integer.parseInt(st.nextToken());
+		c = Integer.parseInt(st.nextToken());
+		
+		dish = new int[n];
+		selected = new int[3001];
+		
+		for(int i=0;i<n;i++) {
+			dish[i] = Integer.parseInt(br.readLine());
 		}
+		for(int i=0;i<k;i++) {
+			if(selected[dish[i]]==0) cnt++;
+			selected[dish[i]]++;
+		}
+		int res = cnt;
 		
-		return n;
+		for(int i=0;i<n;i++) {
+			if(res<=cnt) {
+				if(selected[c] == 0) res = cnt+1;
+				else res = cnt;
+			}
+			
+			if(selected[dish[i]]==1) cnt-=1;
+			selected[dish[i]]--;
+			
+			if(selected[dish[(i+k)%n]]==0) cnt+=1;
+			selected[dish[(i+k)%n]]++;
+		}
+		System.out.println(res);
 	}
 }
