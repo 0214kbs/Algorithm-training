@@ -1,92 +1,85 @@
-class Main {
+public class Main
+{
+	static int n, m;
+	static int canLie = 0;
+	static int[] parent;
+	static int[][] parties;
 	
-	private static int[] parent;
-	private static int N;
-	
-	public static void main(String[] args) throws Exception {
-		N = read();
-		int M = read();
-		int n = read();
+	public static void main(String[] args) throws Exception
+	{
+		n = read(); m = read();
 		
-		makeSet();
-		
-		for (int i = 0; i < n; i++) {
-			union(0, read());
-		}
-		
-		int[][] party = new int[M][];
-		
-		for (int i = 0; i < M; i++) {
-			n = read();
-			party[i] = new int[n];
-			
-			for (int j = 0; j < n; j++) {
-				party[i][j] = read();
-				union(party[i][0], party[i][j]);
-			}
-		}
-		
-		for (int i = 0; i < M; i++) {
-			for (int person : party[i]) {
-				union(party[i][0], person);
-			}
-		}
-		
-		int answer = M;
-		
-		for (int i = 0; i < M; i++) {
-			for (int person : party[i]) {
-				if (parent[person] > 0) {
-					continue;
-				}
-				
-				answer--;
-				break;
-			}
-		}
-		
-		System.out.print(answer);
-	}
-	
-	private static int read() throws Exception {
-		int c, n = System.in.read() & 15;
-		
-		while ((c = System.in.read()) > 32) {
-			n = (n << 3) + (n << 1) + (c & 15);
-		}
-		
-		return n;
-	}
-	
-	private static void makeSet() {
-		parent = new int[N + 1];
-		
-		for (int i = 1; i <= N; i++) {
+		parent = new int[n+1];
+		for(int i=1; i<=n; i++)
 			parent[i] = i;
+		
+		int t = read();
+		
+		if(t == 0)
+		{
+			System.out.print(m);
+			return;
 		}
+		
+		int truth = read();
+		while(t-- > 1)
+			union(truth, read());
+		
+		parties = new int[m][];
+		for(int i=0; i<m; i++)
+		{
+			int p = read();
+			int[] party = new int[p];
+			
+			party[0] = read();
+			for(int j=1; j<p; j++)
+			{
+				party[j] = read();
+				union(party[0], party[j]);
+			}
+			
+			parties[i] = party;
+		}
+		
+		label : for(int[] party : parties)
+		{
+			for(int p : party)
+				if(find(truth) == find(p))
+					continue label;
+			
+			canLie++;
+		}
+		
+		System.out.print(canLie);
 	}
 	
-	private static void union(int x, int y) {
-		int px = findSet(x);
-		int py = findSet(y);
+	private static int find(int x)
+	{
+		if (x == parent[x]) {
+			return x;
+		}
+		
+		return parent[x] = find(parent[x]);
+	}
+	
+	private static void union(int x, int y)
+	{
+		int px = find(x);
+		int py = find(y);
 		
 		if (px == py) {
 			return;
 		}
 		
-		if (px < py) {
-			parent[py] = px;
-			
-		} else {
-			parent[px] = py;
-		}
+		parent[py] = px;
 	}
 	
-	private static int findSet(int x) {
-		if (x == parent[x]) {
-			return x;
-		}
-		
-		return parent[x] = findSet(parent[x]);
+    private static int read() throws Exception
+    {
+	    int c, n = System.in.read() & 15;
+	    while ((c = System.in.read()) > 32)
+	    	n = (n << 3) + (n << 1) + (c & 15);
+	    return n;
 	}
 }
+
