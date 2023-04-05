@@ -27,16 +27,16 @@ class Main {
 		}
 		
 		for (int i = 0; i < M; i++) {
-			for (int j = 0; j < party[i].length; j++) {
-				union(party[i][0], party[i][j]);
+			for (int person : party[i]) {
+				union(party[i][0], person);
 			}
 		}
 		
 		int answer = M;
 		
 		for (int i = 0; i < M; i++) {
-			for (int j = 0; j < party[i].length; j++) {
-				if (parent[party[i][j]] > 0) {
+			for (int person : party[i]) {
+				if (parent[person] > 0) {
 					continue;
 				}
 				
