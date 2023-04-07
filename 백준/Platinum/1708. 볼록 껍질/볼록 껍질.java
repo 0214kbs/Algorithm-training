@@ -1,6 +1,5 @@
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Stack;
 
 class Main {
 	
@@ -81,18 +80,19 @@ class Main {
 			}
 		});
 		
-		Stack<Point> stack = new Stack<>();
-		stack.add(root);
+		Point[] stack = new Point[N];
+		int top = 0;
+		stack[top++] = root;
 		
 		for (int i = 1; i < N; i++) {
-			while (stack.size() > 1 && (ccw(stack.get(stack.size() - 2), stack.get(stack.size() - 1), points[i]) <= 0)) {
-				stack.pop();
+			while (top > 1 && (ccw(stack[top - 2], stack[top - 1], points[i]) <= 0)) {
+				top--;
 			}
 			
-			stack.add(points[i]);
+			stack[top++] = points[i];
 		}
 		
-		return stack.size();
+		return top;
 	}
 	
 	private static int ccw(Point a, Point b, Point c) {
