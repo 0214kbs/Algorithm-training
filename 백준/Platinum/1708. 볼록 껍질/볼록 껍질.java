@@ -110,6 +110,6 @@ class Main {
 	}
 	
 	private static long distance(Point a, Point b) {
-		return (b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y);
+		return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 	}
 }
