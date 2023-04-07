@@ -1,14 +1,14 @@
 class Main {
 	
 	private static long[] bit, arr;
-	private static int N, M;
+	private static int N, MK;
 	
 	public static void main(String[] args) throws Exception {
 		N = readInt();
-		M = readInt() + readInt();
+		MK = readInt() + readInt();
 		
-		arr = new long[N + 1];
 		bit = new long[N + 1];
+		arr = new long[N + 1];
 		
 		for (int i = 1; i <= N; i++) {
 			update(i, readLong());
@@ -16,14 +16,10 @@ class Main {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		while (M-- > 0) {
-			int a = readInt();
-			
-			if (a == 1) {
-				update(readInt(), readLong());
-				
-			} else {
-				sb.append(query(readInt(), readInt())).append('\n');
+		while (MK-- > 0) {
+			switch (readInt()) {
+				case 1: update(readInt(), readLong()); break;
+				case 2: sb.append(query(readInt(), readInt())).append('\n'); break;
 			}
 		}
 		
@@ -67,7 +63,7 @@ class Main {
 	}
 	
 	private static long getPrefixSum(int target) {
-		long answer = 0l;
+		long answer = 0;
 		
 		while (target > 0) {
 			answer += bit[target];
