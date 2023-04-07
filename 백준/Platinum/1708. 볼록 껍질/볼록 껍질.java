@@ -1,78 +1,115 @@
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Stack;
-import java.util.StringTokenizer;
 
-public class Main {
-	static int N;
-	static long sx, sy;
-	static long[][] point;
+class Main {
 	
-	
-	public static void main(String[] args) throws Exception{
-	    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	    N = Integer.parseInt(br.readLine());
-	    point = new long[N][2];
-	    
-	    // 시작점 입력처리하면서 확인
-	    // 우선 입력 첫 번째를 시작점으로 하고 그 다음 입력부터 가장 아래 또는 왼쪽 기준으로
-	    StringTokenizer st = new StringTokenizer(br.readLine());
-	    sx = point[0][0] = Long.parseLong(st.nextToken());
-	    sy = point[0][1] = Long.parseLong(st.nextToken());
-	    
-	    for(int i=1;i<N;i++) {
-	    	st = new StringTokenizer(br.readLine());
-	    	point[i][0] = Long.parseLong(st.nextToken());
-	    	point[i][1] = Long.parseLong(st.nextToken());
-	    	
-	    	if(sy>point[i][1]) {
-	    		sx = point[i][0];
-	    		sy = point[i][1];
-	    	}else if(sy==point[i][1] && sx>point[i][0]) {
-	    		sx = point[i][0];
-	    		sy = point[i][1];
-	    	}
-	    }
-		// 시작점 완료
-	    // 모든 점들을 대상으로 시작점 기준으로ccw을 이용해서 반시계방향으로 정렬, 직선상이면 가까운 것으로
-	    Arrays.sort(point, (p1,p2)->{
-	    	int ret = ccw(sx,sy,p1[0],p1[1],p2[0],p2[1]);
-	    	if(ret>0) return -1; // 반시계 방향
-	    	else if(ret<0) return 1; // 시계 방향이면 뒤로 
-	    	else {
-	    		long diff = distance(sx,sy,p1[0],p1[1])-distance(sx,sy,p2[0],p2[1]);
-	    		return diff>0? 1: -1;
-	    	}
-	    });
-	    
-	    Stack<long[]> stack = new Stack<>();
-	    stack.add(new long[] {sx,sy});
-	    // 스택을 이용해서 정렬된 순서대로 시계, 반시계 방향 고려해서 볼록 껍질을 완성해감
-	    int length = point.length;
-	    for(int i=1;i<length;i++) {
-	    	long[] next = point[i];
-	    	while(stack.size()>1) {
-	    		long[] first = stack.get(stack.size()-2);
-	    		long[] second = stack.get(stack.size()-1);
-	    		
-	    		int ret = ccw(first[0], first[1], second[0], second[1], next[0], next[1]);
-	    		if(ret<=0) stack.pop();
-	    		else break;
-	    	}
-	    	stack.add(point[i]);
-	    }
-	    System.out.println(stack.size());
-	}
-	static int ccw(long x1, long y1,long x2, long y2,long x3, long y3) {
-		long ret = x1*y2+x2*y3+x3*y1-x2*y1-x3*y2-x1*y3;
-		if(ret>0) return 1;
-		else if(ret<0) return -1;
-		else return 0;
+	private static class Point {
+		long x;
+		long y;
+		
+		public Point(long x, long y) {
+			this.x = x;
+			this.y = y;
+		}
 	}
 	
-	static long distance(long x1, long y1, long x2, long y2) {
-		return (x1-x2)*(x1-x2)+(y1-y2)*(y1-y2);
+	private static Point[] points;
+	private static Point root;
+	private static int N;
+	
+	public static void main(String[] args) throws Exception {
+		N = read();
+		points = new Point[N];
+		root = new Point(Long.MAX_VALUE, Long.MAX_VALUE);
+		
+		for (int i = 0; i < N; i++) {
+			points[i] = new Point(read(), read());
+		}
+		
+		System.out.print(grahamScan());
+	}
+	
+	private static int read() throws Exception {
+		int c, n = System.in.read() & 15;
+		boolean isNegative = n == 13;
+		
+		if (isNegative) {
+			n = System.in.read() & 15;
+		}
+		
+		while ((c = System.in.read()) > 32) {
+			n = (n << 3) + (n << 1) + (c & 15);
+		}
+		
+		return isNegative ? ~n + 1 : n;
+	}
+	
+	private static int grahamScan() {
+		for (int i = 0; i < N; i++) {
+			if (points[i].y < root.y) {
+				root = points[i];
+				
+			} else if (points[i].y == root.y) {
+				if (points[i].x < root.x) {
+					root = points[i];
+				}
+			}
+		}
+		
+		Arrays.sort(points, new Comparator<Point>() {
+			@Override
+			public int compare(Point p1, Point p2) {
+				int result = ccw(root, p1, p2);
+				
+				if (result > 0) {
+					return -1;
+					
+				} else if (result < 0) {
+					return 1;
+					
+				} else {
+					long dist1 = distance(root, p1);
+					long dist2 = distance(root, p2);
+					
+					if (dist1 > dist2) {
+						return 1;
+					}
+				}
+				
+				return -1;
+			}
+		});
+		
+		Stack<Point> stack = new Stack<>();
+		stack.add(root);
+		
+		for (int i = 1; i < N; i++) {
+			while (stack.size() > 1 && (ccw(stack.get(stack.size() - 2), stack.get(stack.size() - 1), points[i]) <= 0)) {
+				stack.pop();
+			}
+			
+			stack.add(points[i]);
+		}
+		
+		return stack.size();
+	}
+	
+	private static int ccw(Point a, Point b, Point c) {
+		long result = (a.x * b.y + b.x * c.y + c.x * a.y) - (b.x * a.y + c.x * b.y + a.x * c.y);
+		
+		if (result > 0) {
+			return 1;
+		}
+		
+		if (result < 0) {
+			return -1;
+		}
+		
+		return 0;
+	}
+	
+	private static long distance(Point a, Point b) {
+		return (b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y);
 	}
 }
