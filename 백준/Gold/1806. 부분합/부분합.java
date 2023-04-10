@@ -11,18 +11,18 @@ class Main {
 		int min = Integer.MAX_VALUE;
 		int left = 0;
 		int right = 0;
-		int total = 0;
+		int sum = 0;
 		
 		while (right <= N) {
-			if (total >= S && right - left < min) {
-				min = right - left;
-			}
-			
-			if (total < S) {
-				total += arr[right++];
+			if (sum >= S) {
+				sum -= arr[left++];
+				
+				if (right - left + 1 < min) {
+					min = right - left + 1;
+				}
 				
 			} else {
-				total -= arr[left++];
+				sum += arr[right++];
 			}
 		}
 		
