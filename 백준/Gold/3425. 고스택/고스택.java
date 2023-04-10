@@ -1,7 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 class Main {
@@ -9,17 +7,19 @@ class Main {
 	private static final int MAX = 1000000000;
 	private static final int MIN = -1000000000;
 	
-	private static List<String> cmd;
+	private static String[] cmd;
 	private static int[] stack;
-	private static int top;
+	private static int index, top;
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		StringTokenizer st;
 		
+		cmd = new String[200000];
+		
 		outer: while (true) {
-			cmd = new ArrayList<>();
+			index = 0;
 			
 			while (true) {
 				st = new StringTokenizer(br.readLine());
@@ -33,10 +33,10 @@ class Main {
 					break;
 				}
 				
-				cmd.add(input);
+				cmd[index++] = input;
 				
 				if (st.hasMoreTokens()) {
-					cmd.add(st.nextToken());
+					cmd[index++] = st.nextToken();
 				}
 			}
 			
@@ -47,9 +47,9 @@ class Main {
 				top = -1;
 				stack[++top] = Integer.parseInt(br.readLine());
 				
-				for (int i = 0; i < cmd.size(); i++) {
-					switch (cmd.get(i)) {
-						case "NUM": NUM(Integer.parseInt(cmd.get(++i))); break;
+				for (int i = 0; i < index; i++) {
+					switch (cmd[i]) {
+						case "NUM": NUM(Integer.parseInt(cmd[++i])); break;
 						case "POP": 
 							if (!POP()) {
 								sb.append("ERROR\n");
