@@ -1,72 +1,46 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
-
+import java.io.*;
+import java.util.*;
 
 public class Main {
-	public static void main(String[] args) throws Exception{
+
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
 		
-		int res = 0;
-		Trie trie = new Trie();
-		for(int i=0;i<N;i++) {
-			String s = br.readLine();
-
-			// insert
-			trie.insert(s);
-		}
-		
-		for(int i=0;i<M;i++) {
-			String s = br.readLine();
-			// search
-			if(trie.search(s)) res++;
-		}
-		
-		System.out.println(res);
-	}
-	
-	static class TrieNode{
-		boolean isExist; // 마지막 글자
-		TrieNode[] children; // 자식노드 저장
-		
-		TrieNode(){
-			isExist = false;
-			children = new TrieNode[26]; 
-		}
-		
-	}
-	
-	static class Trie{
-		TrieNode rootNode;
-		Trie(){ 
-			rootNode = new TrieNode();
-		}
-
-		void insert(String str) {
-			TrieNode cur_node = rootNode; 
-			
-			for(int i=0;i<str.length();i++) {
-				int idx = str.charAt(i)-'a';
-				if(cur_node.children[idx]==null) 
-					cur_node.children[idx] = new TrieNode();
-				cur_node = cur_node.children[idx]; 
+		Node t = new Node();
+		for(int i=0; i<N; i++) {
+			String str = br.readLine();
+			Node tmp = t;
+			for(char c : str.toCharArray()) {
+				Node tt = tmp.next[c-'a'];
+				if(tt==null) {
+					tt = new Node();
+					tmp.next[c-'a']= tt;
+				}
+				tmp = tt;
 			}
-			cur_node.isExist= true;  
 		}
 		
-		boolean search(String str) {
-			
-			TrieNode cur_node = rootNode;
-			for(int i=0;i<str.length();i++) {
-				int idx = str.charAt(i)-'a';
-				if(cur_node.children[idx]==null) return false;
-				cur_node = cur_node.children[idx];
+		int cnt=0;
+		for(int i=0; i<M; i++) {
+			String str = br.readLine();
+			Node tmp = t;
+			for(char c : str.toCharArray()) {
+				Node tt = tmp.next[c-'a'];
+				if(tt==null) {
+					cnt++;
+					break;
+				}
+				tmp = tt;
 			}
-			return true;
 		}
+		System.out.println(M-cnt);
 	}
+
+}
+
+class Node{
+	Node[] next = new Node[26];
 }
