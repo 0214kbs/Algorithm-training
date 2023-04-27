@@ -13,13 +13,12 @@ public class Main {
 		for(int i=0; i<N; i++) {
 			String str = br.readLine();
 			Node tmp = t;
-			for(char c : str.toCharArray()) {
-				Node tt = tmp.next[c-'a'];
-				if(tt==null) {
-					tt = new Node();
-					tmp.next[c-'a']= tt;
+			for(int j = 0; j<str.length(); j++) {
+				char c = str.charAt(j);
+				if(tmp.next[c-'a']==null) {
+					tmp.next[c-'a']= new Node();;
 				}
-				tmp = tt;
+				tmp = tmp.next[c-'a'];
 			}
 		}
 		
@@ -27,13 +26,15 @@ public class Main {
 		for(int i=0; i<M; i++) {
 			String str = br.readLine();
 			Node tmp = t;
-			for(char c : str.toCharArray()) {
+			for(int j = 0; j<str.length(); j++) {
+				char c = str.charAt(j);
+				
 				Node tt = tmp.next[c-'a'];
+				tmp = tt;
 				if(tt==null) {
 					cnt++;
 					break;
 				}
-				tmp = tt;
 			}
 		}
 		System.out.println(M-cnt);
