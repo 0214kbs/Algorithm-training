@@ -8,7 +8,7 @@
 
 ### 분류
 
-자료 구조(data_structures), 분리 집합(disjoint_set)
+자료 구조, 분리 집합
 
 ### 문제 설명
 
