@@ -53,17 +53,18 @@ def spread_virus(q, blanks):
                 nr = r+dr[d]
                 nc = c+dc[d]
 
-                if 0<=nr<N and 0<=nc<N:
-                    if visited[nr][nc] == -1:
-                        if board[nr][nc]  == 0:
-                            q.append((nr,nc))
-                            # print('append: ',nr,nc)
-                            visited[nr][nc] = 1
-                            blanks -=1
-                        elif board[nr][nc] == 2:
-                            q.append((nr,nc))
-                            # print('append: ',nr,nc)
-                            visited[nr][nc] =1
+                if 0>nr or 0>nc or nr>=N or nc>=N:
+                    continue
+                if visited[nr][nc] == -1:
+                    if board[nr][nc]  == 0:
+                        q.append((nr,nc))
+                        # print('append: ',nr,nc)
+                        visited[nr][nc] = 1
+                        blanks -=1
+                    elif board[nr][nc] == 2:
+                        q.append((nr,nc))
+                        # print('append: ',nr,nc)
+                        visited[nr][nc] =1
 
 
 # virus list 조합
