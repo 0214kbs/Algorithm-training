@@ -1,6 +1,6 @@
 N,M = map(int, input().split())
 
-res = [0]*M
+res = []
 
 def dfs(L,BW):
     if L == M:
@@ -10,11 +10,9 @@ def dfs(L,BW):
         print()
     else:
         for i in range(BW,N+1):
-            if L>0 and i>=res[L-1]:
-                res[L] = i
-            if L == 0 :
-                res[L] = i
-            dfs(L + 1, i)
+            res.append(i)
+            dfs(L+1,i)
+            res.pop()
 
 
 dfs(0,1)
