@@ -1,24 +1,24 @@
 import sys
 input = sys.stdin.readline
-
-S = input().rstrip()
+S = input().strip()
 q = int(input())
+alpha = 'abcdefghijklmnopqrstuvwxyz'
 
-prefix_sum = [[0]*len(S) for _ in range(26)]
-
-for i in range(len(S)):
-    if i == 0:
-        prefix_sum[ord(S[i])-97][i] +=1
-    else:
-        for j in range(26):
-            prefix_sum[j][i] = prefix_sum[j][i-1]
-        prefix_sum[ord(S[i])-97][i] +=1
+dict = {}
+for a in alpha:
+    cnt = 0
+    tmp = [0]*len(S)
+    for i in range(len(S)):
+        if a == S[i]:
+            cnt += 1
+        tmp[i] = cnt
+    dict[a] = tmp
 
 for _ in range(q):
     a, l, r = input().split()
-    if int(l) == 0:
-        print(prefix_sum[ord(a)-97][int(r)])
+    l, r = int(l), int(r)
+    acc_sum = dict[a]
+    if l == 0:
+        print(acc_sum[r])
     else:
-        print(prefix_sum[ord(a)-97][int(r)]-prefix_sum[ord(a)-97][int(l)-1])
-
-# print(prefix_sum[0])
+        print(acc_sum[r] - acc_sum[l-1])
