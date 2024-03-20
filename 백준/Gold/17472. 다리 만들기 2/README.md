@@ -4,11 +4,15 @@
 
 ### 성능 요약
 
-메모리: 14188 KB, 시간: 124 ms
+메모리: 112008 KB, 시간: 136 ms
 
 ### 분류
 
-구현, 그래프 이론, 브루트포스 알고리즘, 그래프 탐색, 너비 우선 탐색, 깊이 우선 탐색, 최소 스패닝 트리
+너비 우선 탐색, 브루트포스 알고리즘, 깊이 우선 탐색, 그래프 이론, 그래프 탐색, 구현, 최소 스패닝 트리
+
+### 제출 일자
+
+2024년 3월 20일 16:23:28
 
 ### 문제 설명
 
@@ -67,7 +71,7 @@
 <table class="table table-bordered" style="width: 100%;">
 	<tbody>
 		<tr>
-			<td style="width: 50%; text-align: center;"><img alt="" src="https://upload.acmicpc.net/b6f340e2-8248-4385-9a6a-546e7a2648e4/-/preview/" style="width: 220px; height: 195px;"></td>
+			<td style="width: 50%; text-align: center;"><img alt="" src="" style="width: 220px; height: 195px;"></td>
 			<td style="width: 50%; text-align: center;"><img alt="" src="https://upload.acmicpc.net/dd98ec33-6796-455d-a612-8db31a9806f0/-/preview/" style="width: 220px; height: 195px;"></td>
 		</tr>
 		<tr>
