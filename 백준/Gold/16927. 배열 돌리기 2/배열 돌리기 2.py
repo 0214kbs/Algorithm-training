@@ -4,7 +4,7 @@ N, M, R = map(int, input().split())
 arr = [list(map(int, input().split())) for _ in range(N)]
 drc = [[1, 0], [0, 1], [-1, 0], [0, -1]]
 
-def rotate():
+def rotate_arr():
     q = deque()
     for start in range(min(N, M) // 2):
         r = c = start
@@ -17,10 +17,10 @@ def rotate():
                     r,c = nr,nc
                 else:
                     break
+        # print(q)
+        q.rotate(R % ((N - start * 2) * 2 + (M - start * 2) * 2 - 4))
 
-        for _ in range(R % ((N - start * 2) * 2 + (M - start * 2) * 2 - 4)):
-            q.appendleft(q.pop())
-
+        # print(q)
         for dr, dc in drc:
             while True:
                 nr,nc = r + dr, c + dc
@@ -30,7 +30,7 @@ def rotate():
                 else:
                     break
 
-rotate()
+rotate_arr()
 
 for i in range(N):
     print(*arr[i])
