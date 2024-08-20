@@ -1,22 +1,20 @@
 import sys,heapq
 input = sys.stdin.readline
-n = int(input())
-left_heap = []
-right_heap = []
 
-for i in range(n):
-    num = int(input())
-    if len(left_heap) == len(right_heap):
-        heapq.heappush(left_heap, -num)
+N = int(input())
+left = []
+right = []
+for i in range(1,N+1):
+    now = int(input())
+    if len(left) == len(right):
+        heapq.heappush(left, -now)
     else:
-        heapq.heappush(right_heap,num)
+        heapq.heappush(right, now)
 
-    if right_heap and right_heap[0] < -left_heap[0]:
-        left_v = heapq.heappop(left_heap)
-        right_v = heapq.heappop(right_heap)
+    if right and right[0]<-left[0]:
+        left_max = heapq.heappop(left)
+        right_min = heapq.heappop(right)
+        heapq.heappush(right, -left_max)
+        heapq.heappush(left, -right_min)
 
-        heapq.heappush(left_heap,-right_v)
-        heapq.heappush(right_heap,-left_v)
-    # print(left_heap)
-    # print(right_heap)
-    print(-left_heap[0])
+    print(-left[0])
