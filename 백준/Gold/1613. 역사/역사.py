@@ -1,25 +1,24 @@
 import sys
 input = sys.stdin.readline
-INF = int(1e9)
 
-n,m = map(int, input().split())
-graph = [[INF]*(n+1) for _ in range(n+1)]
-for _ in range(m):
+n, k = map(int, input().split())
+
+dp = [[0]*n for _ in range(n)]
+for _ in range(k):
     a,b = map(int, input().split())
-    graph[a][b] = 1
+    # a -> b 순서
+    dp[a-1][b-1] = -1
+    dp[b-1][a-1] = 1
 
-for k in range(1,n+1):
-    for a in range(1,n+1):
-        for b in range(1,n+1):
-            graph[a][b] = min(graph[a][b], graph[a][k]+graph[k][b])
+for k in range(n):
+    for i in range(n):
+        for j in range(n):
+            if dp[i][k] == 1 and dp[k][j] == 1:
+                dp[i][j] = 1
+            elif dp[i][k] == -1 and dp[k][j] == -1:
+                dp[i][j] = -1
 
 s = int(input())
 for _ in range(s):
-    i, j = map(int, input().split())
-    if graph[i][j] == INF and graph[j][i] == INF:
-        print(0)
-        continue
-    if graph[i][j] < graph[j][i]:
-        print(-1)
-    else:
-        print(1)
+    a,b = map(int, input().split())
+    print(dp[a-1][b-1])
