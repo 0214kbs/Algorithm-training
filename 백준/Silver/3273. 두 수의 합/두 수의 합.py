@@ -1,26 +1,21 @@
 import sys
-from itertools import combinations
 input = sys.stdin.readline
 
 n = int(input())
-alist = list(map(int, input().split()))
+alist =list(map(int, input().split()))
 x = int(input())
 
 alist.sort()
-
-res = 0
-start = 0
-end = n-1
-while True:
-    if start >= end:
-        break
-    if alist[start]+alist[end] > x:
-        end-=1
-    elif alist[start]+alist[end] == x:
-        end-=1
-        start +=1
-        res +=1
+s, e = 0,n-1
+cnt = 0
+while s<e:
+    sumv = alist[s]+alist[e]
+    if sumv == x:
+        s+=1
+        e-=1
+        cnt += 1
+    elif sumv <x:
+        s += 1
     else:
-        start+=1
-
-print(res)
+        e -= 1
+print(cnt)
