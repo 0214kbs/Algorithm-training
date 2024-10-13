@@ -1,4 +1,4 @@
-import sys, heapq
+import sys
 sys.setrecursionlimit(100000)
 input = sys.stdin.readline
 
@@ -7,27 +7,23 @@ def find(parent, a):
         parent[a] = find(parent, parent[a])
     return parent[a]
 
-def union(parent, a,b):
-    a = find(parent,a)
-    b = find(parent,b)
-    if a<b:
-        parent[b] = a
-    else:
-        parent[a] = b
-
 
 V, E = map(int, input().split())
 parent = [ i for i in range(V+1)]
-heap = []
+edges = []
 min_cost = 0
 for _ in range(E):
     a,b,c = map(int, input().split())
-    heapq.heappush(heap, [c,a,b])
+    edges.append([c,a,b])
 
-while heap:
-    cost, a,b = heapq.heappop(heap)
-
-    if find(parent,a) != find(parent,b):
-        union(parent,a,b)
+edges.sort()
+for cost, a,b in edges:
+    pa = find(parent,a)
+    pb = find(parent,b)
+    if pa != pb:
+        if pa>pb:
+            parent[pa] = pb
+        else:
+            parent[pb] = pa
         min_cost += cost # 간선 비용
 print(min_cost)
